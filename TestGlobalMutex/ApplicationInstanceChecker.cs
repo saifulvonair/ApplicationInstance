@@ -145,7 +145,15 @@ namespace ApplicationInstance
             var securitySettings = new MutexSecurity();
             securitySettings.AddAccessRule(allowEveryoneRule);
             createdNew = true;
-            Mutex mutex = new Mutex(true, mutexId, out createdNew);
+
+            try
+            {
+                Mutex mutex = new Mutex(true, mutexId, out createdNew, securitySettings);
+            }
+            catch (Exception e)
+            {
+                createdNew = false;
+            }
 
             if (!createdNew)
             {
